@@ -1,15 +1,39 @@
 import { createStore } from '@/lib/zustand'
+import axios from 'axios'
+import { signIn } from 'next-auth/react'
+import { setInputEl } from '@/helpers/setInputElement'
 
-const initState = {
-  email: '',
-  name: '',
-  password: '',
-  variant: 'login' as 'login' | 'register'
-}
-
-type StringKeys<T> = { [K in keyof T]: T[K] extends string ? K : never }[keyof T]
-
-export const useAuth = createStore(initState, (set, get) => ({
-  setAuth: (key: StringKeys<typeof initState>) => (e: React.ChangeEvent<HTMLInputElement>) => set({ [key]: e.target.value }),
-  setVariant: () => set(state => void (state.variant = state.variant == 'login' ? 'register' : 'login'))
-}))
+type Variant = 'login' | 'register'
+type Action = { type: Variant }
+export const useAuth = createStore(
+  {
+    email: '',
+    name: '',
+    password: '',
+    variant: 'login' as Variant,
+    isRegistered: false,
+    isError: false
+  },
+  (set, get) => ({
+    setAuth: setInputEl(set),
+    setVariant: () => set(state => void (state.variant = state.variant == 'login' ? 'register' : 'login'))
+  }),
+  async (state, action: Action) => {
+    const { email, name, password } = state
+    try {
+      switch (action.type) {
+        case 'register':
+          await axios.post('/api/register', { email, name, password })
+          state.isRegistered = true
+          break
+        case 'login':
+          await signIn('credentials')
+          break
+      }
+    } catch (error) {
+      state.isRegistered = false
+      state.isError = true
+      console.log(error)
+    }
+  }
+)
