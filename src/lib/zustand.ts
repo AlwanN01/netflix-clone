@@ -95,7 +95,7 @@ const setStateStore = <T extends object>(initstate: T, set: SetState<T>) => {
 }
 
 function extractString(str: string) {
-  const regex = /state\.(.*?)\s*=/g
+  const regex = /state\.(.*?)\s*\=\s*(.*)/g
   let matches = []
   let match
   while ((match = regex.exec(str))) {
