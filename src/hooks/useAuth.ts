@@ -2,9 +2,10 @@ import { createStore } from '@/lib/zustand'
 import axios from 'axios'
 import { signIn } from 'next-auth/react'
 import { setInputEl } from '@/helpers/setInputElement'
-
+import type { NextRouter } from 'next/router'
 type Variant = 'login' | 'register'
-type Action = { type: Variant }
+type Action = { type: Variant; router: NextRouter }
+
 export const useAuth = createStore(
   {
     email: '',
@@ -27,7 +28,15 @@ export const useAuth = createStore(
           state.isRegistered = true
           break
         case 'login':
-          await signIn('credentials')
+          const signRes = await signIn('credentials', {
+            email,
+            password,
+            redirect: false,
+            callbackUrl: '/auth'
+          })
+          if (signRes?.ok) action.router.push('/')
+          state.email = ''
+          state.password = ''
           break
       }
     } catch (error) {

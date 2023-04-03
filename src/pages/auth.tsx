@@ -1,11 +1,13 @@
 import Input from '@/components/Input'
 import { useAuth } from '@/hooks/useAuth'
 import { shallow } from 'zustand/shallow'
+import { useRouter } from 'next/router'
+
 const Auth = () => {
+  const router = useRouter()
   const variant = useAuth.variant()
   const isRegistered = useAuth.isRegistered()
   const { setVariant, setAuth, dispatch } = useAuth(({ setVariant, setAuth, dispatch }) => ({ setVariant, setAuth, dispatch }), shallow)
-
   return (
     <div className="relative h-full w-full bg-[url('../../public/images/hero.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
       <div className='bg-black w-full h-full lg:bg-opacity-50'>
@@ -20,7 +22,9 @@ const Auth = () => {
                 <Input id='email' label='Email' type='email' onChange={setAuth('email')} />
                 <Input id='password' label='Password' type='password' onChange={setAuth('password')} />
               </div>
-              <button onClick={() => dispatch({ type: 'register' })} className='bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700'>
+              <button
+                onClick={() => dispatch({ type: variant == 'login' ? 'login' : 'register', router })}
+                className='bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700'>
                 {variant == 'login' ? 'Sign in' : 'Register'}
               </button>
               <p className='text-neutral-500 mt-12'>
