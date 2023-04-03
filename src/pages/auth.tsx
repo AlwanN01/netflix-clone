@@ -8,6 +8,8 @@ import { signIn } from 'next-auth/react'
 const { use } = useAuth
 const Auth = () => {
   const router = useRouter()
+  const email = use.email()
+  const password = use.password()
   const variant = use.variant()
   const isRegistered = use.isRegistered()
   const { setVariant, setAuth, dispatch } = useAuth(({ setVariant, setAuth, dispatch }) => ({ setVariant, setAuth, dispatch }), shallow)
@@ -22,8 +24,8 @@ const Auth = () => {
               <h2 className='text-white text-4xl mb-8 font-semibold'>{variant == 'login' ? 'Sign In' : 'Create an Account'}</h2>
               <div className='flex flex-col gap-4'>
                 {variant == 'register' && <Input id='name' label='Name' onChange={setAuth('name')} />}
-                <Input id='email' label='Email' type='email' onChange={setAuth('email')} />
-                <Input id='password' label='Password' type='password' onChange={setAuth('password')} />
+                <Input id='email' value={email} label='Email' type='email' onChange={setAuth('email')} />
+                <Input id='password' value={password} label='Password' type='password' onChange={setAuth('password')} />
               </div>
               <button
                 onClick={() => dispatch({ type: variant == 'login' ? 'login' : 'register', router })}
