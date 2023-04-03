@@ -38,6 +38,13 @@ export default NextAuth({
       }
     })
   ],
+  // callbacks: {
+  //   async session({ session, token }) {
+  //     const user = await prisma.user.findUnique({ where: { email: token.email! } })
+  //     session.user = user!
+  //     return session
+  //   }
+  // },
   pages: {
     signIn: '/auth'
   },
