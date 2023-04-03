@@ -1,4 +1,4 @@
-import { createStore } from '@/lib/zustand'
+import { createStore } from '@/libs/zustand'
 import axios from 'axios'
 import { signIn } from 'next-auth/react'
 import { setInputEl } from '@/helpers/setInputElement'
@@ -17,7 +17,7 @@ export const useAuth = createStore(
   },
   (set, get) => ({
     setAuth: setInputEl(set),
-    setVariant: () => set(state => void (state.variant = state.variant == 'login' ? 'register' : 'login'))
+    setVariant: () => set({ variant: get().variant == 'login' ? 'register' : 'login' })
   }),
   async (state, action: Action) => {
     const { email, name, password } = state
@@ -31,15 +31,13 @@ export const useAuth = createStore(
           const signRes = await signIn('credentials', {
             email,
             password,
-            redirect: false,
-            callbackUrl: '/auth'
+            redirect: false
           })
-          console.log(signRes)
 
           if (signRes?.ok) {
             state.email = ''
             state.password = ''
-            action.router.push('/')
+            action.router.push('/profiles')
           }
           break
       }

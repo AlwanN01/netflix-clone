@@ -1,4 +1,4 @@
-import { SetState } from '@/lib/zustand'
+import { SetState } from '@/libs/zustand'
 
 type StringKeys<T> = { [K in keyof T]: T[K] extends string ? K : never }[keyof T]
 

@@ -2,6 +2,9 @@ import Input from '@/components/Input'
 import { useAuth } from '@/hooks/useAuth'
 import { shallow } from 'zustand/shallow'
 import { useRouter } from 'next/router'
+import { FcGoogle } from 'react-icons/fc'
+import { FaGithub } from 'react-icons/fa'
+import { signIn } from 'next-auth/react'
 const { use } = useAuth
 const Auth = () => {
   const router = useRouter()
@@ -27,6 +30,16 @@ const Auth = () => {
                 className='bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700'>
                 {variant == 'login' ? 'Sign in' : 'Register'}
               </button>
+              <div className='flex flex-row items-center gap-6 mt-8 justify-center'>
+                <div
+                  onClick={() => signIn('google', { callbackUrl: '/profiles' })}
+                  className='w-12 h-12 bg-white rounded-full grid place-items-center cursor-pointer hover:scale-105 transition'>
+                  <FcGoogle size={37} />
+                </div>
+                <div className='w-12 h-12 bg-white rounded-full grid place-items-center cursor-pointer hover:scale-105 transition'>
+                  <FaGithub size={37} />
+                </div>
+              </div>
               <p className='text-neutral-500 mt-12'>
                 {variant == 'login' ? 'First time using Netflix ?' : 'Already have an account ?'}
                 <span onClick={setVariant} className='text-white ml-1 hover:underline cursor-pointer select-none'>
