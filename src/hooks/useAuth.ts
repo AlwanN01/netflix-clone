@@ -34,9 +34,11 @@ export const useAuth = createStore(
             redirect: false,
             callbackUrl: '/auth'
           })
-          if (signRes?.ok) action.router.push('/')
-          state.email = ''
-          state.password = ''
+          if (signRes?.ok) {
+            state.email = ''
+            state.password = ''
+            action.router.push('/')
+          }
           break
       }
     } catch (error) {
