@@ -34,6 +34,8 @@ export const useAuth = createStore(
             redirect: false,
             callbackUrl: '/auth'
           })
+          console.log(signRes)
+
           if (signRes?.ok) {
             state.email = ''
             state.password = ''

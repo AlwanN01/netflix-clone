@@ -2,11 +2,11 @@ import Input from '@/components/Input'
 import { useAuth } from '@/hooks/useAuth'
 import { shallow } from 'zustand/shallow'
 import { useRouter } from 'next/router'
-
+const { use } = useAuth
 const Auth = () => {
   const router = useRouter()
-  const variant = useAuth.variant()
-  const isRegistered = useAuth.isRegistered()
+  const variant = use.variant()
+  const isRegistered = use.isRegistered()
   const { setVariant, setAuth, dispatch } = useAuth(({ setVariant, setAuth, dispatch }) => ({ setVariant, setAuth, dispatch }), shallow)
   return (
     <div className="relative h-full w-full bg-[url('../../public/images/hero.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
