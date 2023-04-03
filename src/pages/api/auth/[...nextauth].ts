@@ -31,8 +31,6 @@ export default NextAuth({
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) throw new Error('Email and Password required')
         const user = await prisma.user.findUnique({ where: { email: credentials.email } })
-        console.log(user)
-
         if (!user || !user.hashedPassword) throw new Error('Email does not exist')
         const isCorrectPassword = await compare(credentials.password, user.hashedPassword)
         if (!isCorrectPassword) throw new Error('Inccorect Password')
@@ -40,13 +38,14 @@ export default NextAuth({
       }
     })
   ],
-  // callbacks: {
-  //   async session({ session, token }) {
-  //     const user = await prisma.user.findUnique({ where: { email: token.email! } })
-  //     session.user = user!
-  //     return session
-  //   }
-  // },
+  callbacks: {
+    async session({ session, token }) {
+      const user = await prisma.user.findUnique({ where: { email: token.email! } })
+      if (!user) throw new Error('Email does not exist')
+      session.user = user
+      return session
+    }
+  },
   pages: {
     signIn: '/auth'
   },
